@@ -1,0 +1,83 @@
+Chapter 1
+- Not enough to know how fast an algo takes, need to know how the running time increases
+as the input grows (because different runtimes grow at different rates)
+- Big O doesn't tell you the speed in seconds, because that would depend on things other
+than the algo itself; it lets you compare the # of operations, it tells you how fast the
+algo grows
+
+Chapter 2
+- Array
+    - Everything stored contiguously in memory
+    - If you want to extend, need to potentially find larger chunk of memory then you had
+    previously...you can allocate extra in advance, but that is not perfect since you may
+    waste the space or need to re-allocate again anyway.
+    - Can look up any element instantly
+- Linked Lists
+    - Items can be anywhere in memory...bunch of random access memory locations linked
+    together
+    - Never have to move your items...if you have space in memory, you have space for 
+    your LL
+    - Have to traverse to retrieve elements
+- A vs LL:
+    - Arrays are often used because they have a lot of advantages, like:
+        - Provide random access
+        - They can use caching as well...computers read a whole section at a time, b/c
+        it makes it go faster the next time, so they are faster at sequential access as well
+        even though that is the only way to traverse a LL
+        - Modern CPUs use a memory hierarchy that includes caches (small, fast memory) close
+        to the CPU. When the CPU accesses a memory location, it loads not just that single
+        location, but an entire block (or cache line) into the cache.
+        - Because of this contiguous storage, accessing one element often results in 
+        subsequent elements being loaded into the cache. (Spatial locality)
+            - This makes future access to nearby elements much faster b/c they are likely
+            to be in the cache
+            - LLs lack spatial locality b/c the next element may be anywhere in memory
+                - This means that an access is more likely to result in a cache miss,
+                requiring a fetch from the slower main memory and the loading of new
+                data into the cache
+        - Cache line
+            - Smallest unit of data that can be transferred between main memory and the 
+            cache; typical size may be 64 bytes
+            - When the CPU accesses memory, it doesn't just load the specific byte or word
+            being accessed, it loads the entire cache line that contains that address
+                - Eg., if you need to access byte 100, it may load bytes 64-127 into the 
+                cache
+        - Spatial locality
+            - Tendency of a program to access data locations that are near each other within
+            a short period
+            - Caches are designed to exploit spatial locality by loading entire cache lines
+    - You may over-allocate for an array, but for each item in the LL, you are storing additional
+    data (the pointer to the next item), so unless the items are really large, you are probably
+    better off using an array
+        - If the items are large, then even one wasted spot can seem like a big deal, and that 
+        extra mem for the pointers can seem small by comparison.
+        - Relative overhead is larger for small items
+        - If the item is 10MB, and you over-allocate for 10, then you are allocating 100MB vs. 
+        allocating 8 bytes for a pointer
+    - Arrays have fast reads, and slow inserts
+        - LLs have fast inserts, and slow reads
+    - You'd want to use a LL if you can keep track of node references in applications like a stack
+    or queue where operations are at the ends
+        - So for something like a queue where a server puts new orders onto it and the chef reads
+        the front (interacting with the ends of the list and not searching or random access
+        going on); interaction is going on at points we should already have references to
+    - Arrays and LLs are combined to build more complex DS like hash tables and B-trees
+
+Chapter 3
+- Stack
+    - Push and pop onto the top...that's it! So when implementing, all we need to think about is
+    the head.
+        - For a queue, we need to track the head and the tail, since they get added to the back,
+        and get processed from the front.
+- When you call a function from another, the caller is paused in partially completed state and all
+the variables for that fn are still on the call stack
+- Using the stack via recursion is helpful b/c it manually handles the stack for you...
+
+Chapter 4
+- D&C is a tool in the kit...can I solve this using D&C?
+    - This technique has 2 steps:
+        1) Find a simple base case
+        2) Find a way to reduce the problem such that you work towards it
+- Base case for recursive fn is typically an array with 0 or 1 elements
+- Quicksort is much faster than selection sort and also uses D&C
+

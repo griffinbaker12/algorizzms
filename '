@@ -1,0 +1,7 @@
+def get_max_num(arr, max=float("-inf")):
+    if len(arr) == 0:
+        return max
+    return get_max_num(arr[1:], max)
+
+
+print(get_max_num([1, 2, 3]))
