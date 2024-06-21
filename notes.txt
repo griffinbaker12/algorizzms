@@ -78,6 +78,21 @@ Chapter 4
     - This technique has 2 steps:
         1) Find a simple base case
         2) Find a way to reduce the problem such that you work towards it
+    - Because you know that it works for that smaller case, you induce it will work
+    for the larger one
 - Base case for recursive fn is typically an array with 0 or 1 elements
 - Quicksort is much faster than selection sort and also uses D&C
+    - The worst case performance is n^2 b/c the elements may all be sorted, and
+    you need to do the partition step n times where you select the values on either side
+    - The average case is nlogn which approximates you choosing a list that divides
+    the size of the partition you check each time in half
+    - It seems similar to me to that one question where you select the values that you 
+    may need, and then you combine them in any ways you need depending on the problem
+        - Maybe you select the min value, maybe you call the same fn recursively 
+        on those parts
+- Merge vs quick
+    - Sometimes the constant can matter
+    - Even though quick is n^2 in the worst case, it hits the average case much more
+    commonly, and when it hits the average case, it will be faster than merge sort
+
 
