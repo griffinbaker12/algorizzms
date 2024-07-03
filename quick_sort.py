@@ -44,13 +44,42 @@ def qs_rand_pivot(arr):
     return qs(lower_arr) + same_arr + qs(higher_arr)
 
 
-def run():
+# the whole idea with this algorithm is that you:
+# 1) pick a pivot
+# 2) sort smaller to the left, larger to the right
+def qs_constant_space(arr):
+    # recursive function that calls on divided arrays
+    def qs(arr, lo, hi):
+        if lo >= hi:
+            return
+        pivot = partition(arr, lo, hi)
+        qs(arr, lo, pivot - 1)
+        qs(arr, pivot + 1, hi)
 
-    lst = [randint(0, 50) for i in range(10)]
+    # picks the pivot and weak sorts the array properly (meaning the array is not entirely sorted)
+    # but still is sorted in some (weak) manner by the pivot
+    def partition(arr, lo, hi):
+        pivot = arr[hi]
+        idx = lo - 1
+        for i in range(lo, hi):
+            if arr[i] <= pivot:
+                idx += 1
+                arr[idx], arr[i] = arr[i], arr[idx]
+        idx += 1
+        arr[hi], arr[idx] = arr[idx], arr[hi]
+        return idx
+
+    qs(arr, 0, len(arr) - 1)
+    return arr
+
+
+def run():
+    lst = [randint(0, 50) for _ in range(10)]
     print("sorting: ", lst)
     assert qs(lst) == sorted(lst)
     assert qs_rand_pivot(lst) == sorted(lst)
-    print("both sorts worked!", qs(lst))
+    assert qs_constant_space(lst) == sorted(lst)
+    print("all sorts worked!", qs(lst))
 
 
 if __name__ == "__main__":

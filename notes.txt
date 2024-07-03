@@ -94,5 +94,8 @@ Chapter 4
     - Sometimes the constant can matter
     - Even though quick is n^2 in the worst case, it hits the average case much more
     commonly, and when it hits the average case, it will be faster than merge sort
-
+- Also learned that randint is inclusive on both ends
+    - Actually fascinating because there would be values that you could not implement
+    in languages with fixed-size integers, like MAX_SIZE+1 could not be represented
+    without using a different type than what is returned by the fn
 

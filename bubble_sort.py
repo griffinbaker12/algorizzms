@@ -1,5 +1,4 @@
 # thinking about this wrong, you want to do the internal loop n times
-# and the internal loop is where you go through and save the largest value each time
 # each iteration you can move it over...hence the name bubble sort
 def bubble_sort(arr):
     """
