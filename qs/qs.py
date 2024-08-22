@@ -1,34 +1,90 @@
 import random
 
+# def qs_const(arr, lo, high, shld_print=False):
+#     if lo >= high:
+#         return
+#
+#     piv = arr[lo]
+#     idx = lo
+#     for i in range(idx + 1, high + 1):
+#         if arr[i] <= piv:
+#             idx += 1
+#             arr[idx], arr[i] = arr[i], arr[idx]
+#
+#     if shld_print:
+#         print(arr)
+#
+#     arr[lo], arr[idx] = arr[idx], arr[lo]
+#
+#     if shld_print:
+#         print(arr)
+#
+#     qs_const(arr, lo, idx - 1)
+#     qs_const(arr, idx + 1, high)
+#
+#     return arr
+
+
+# def qs_const(arr, lo, high, shld_print=False):
+#     if lo >= high:
+#         return
+#
+#     piv = arr[lo]
+#     idx = lo + 1
+#     for i in range(idx, high + 1):
+#         if arr[i] <= piv:
+#             arr[idx], arr[i] = arr[i], arr[idx]
+#             idx += 1
+#
+#     if shld_print:
+#         print(arr)
+#
+#     arr[lo], arr[idx - 1] = arr[idx - 1], arr[lo]
+#
+#     if shld_print:
+#         print(arr)
+#
+#     qs_const(arr, lo, idx - 2)
+#     qs_const(arr, idx, high)
+#
+#     return arr
+
 
 def qs_const(arr, lo, high, shld_print=False):
     if lo >= high:
         return
 
     piv = arr[lo]
-    new_lo = lo + 1
-    for i in range(new_lo, high + 1):
-        if arr[i] < piv:
-            arr[new_lo], arr[i] = arr[i], arr[new_lo]
-            new_lo += 1
+    idx = lo + 1
+    print(arr, lo, high)
+    for i in range(idx, high + 1):
+        if arr[i] <= piv:
+            arr[idx], arr[i] = arr[i], arr[idx]
+            idx += 1
 
     if shld_print:
         print(arr)
 
-    arr[lo], arr[new_lo - 1] = arr[new_lo - 1], arr[lo]
+    arr[lo], arr[idx - 1] = arr[idx - 1], arr[lo]
 
     if shld_print:
         print(arr)
 
-    qs_const(arr, lo, new_lo - 1)
-    qs_const(arr, new_lo, high)
+    qs_const(arr, lo, idx - 1)
+    qs_const(arr, idx + 1, high)
 
     return arr
 
 
-print(qs_const([4, 49, 1, 40, 68], 0, 4, True))
-print(qs_const([53, 85, 45, 86, 47], 0, 4, True))
-print(qs_const([14, 69, 84, 6, 84], 0, 4, True))
+print(qs_const([5, 1, 5, 9, 7], 0, 2))
+print(qs_const([84, 6, 84], 0, 2))
+# exit()
+
+# print(qs_const([4, 49, 1, 40, 68], 0, 4, True))
+# print(qs_const([53, 85, 45, 86, 47], 0, 4, True))
+# print(qs_const([84, 84, 6], 0, 2, True))
+# print(qs_const([84, 6, 84], 0, 2, True))
+# print(qs_const([14, 69, 84, 6, 84], 0, 4, True))
 # exit()
 
 
@@ -45,13 +101,11 @@ def qs(arr):
     # arb selection
     piv = arr[0]
 
-    # there is no cool operator trick you can do here like in lisp right?
-    lower, equal, upper = (
-        [v for v in arr if v < piv],
-        [v for v in arr if v == piv],
-        [v for v in arr if v > piv],
+    return (
+        [v for v in arr if v < piv]
+        + [v for v in arr if v == piv]
+        + [v for v in arr if v > piv],
     )
-    return qs(lower) + equal + qs(upper)
 
 
 def main():
