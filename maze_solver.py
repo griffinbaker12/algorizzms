@@ -1,4 +1,9 @@
+from collections import deque
 from typing import List, Set, Tuple, TypedDict
+
+# So, questions from here:
+# 1) What exactly is a TypedDict? Think I get the general idea.
+# 2) Why doses BFS guarantee to find the shortest path?
 
 
 class Point(TypedDict):
@@ -6,92 +11,56 @@ class Point(TypedDict):
     y: int
 
 
-def dfs_walk(
-    maze: List[str],
-    wall: str,
-    curr: Point,
-    end: Point,
-    path: List[Point],
-    seen: Set[Tuple[int, int]],
-    shortest_path: List[Point],
-) -> None:
-    # Base cases
-    if (
-        curr["x"] < 0
-        or curr["x"] >= len(maze[0])
-        or curr["y"] < 0
-        or curr["y"] >= len(maze)
-    ):
-        return
-    if maze[curr["y"]][curr["x"]] == wall:
-        return
-    if (curr["y"], curr["x"]) in seen:
-        return
+def bfs_shortest_path(
+    maze: List[str], wall: str, start: Point, end: Point
+) -> List[Point]:
+    queue = deque([(start, [start])])
+    seen: Set[Tuple[int, int]] = set()
 
-    # Add current point to path
-    path.append(curr)
-    seen.add((curr["y"], curr["x"]))
+    while queue:
+        current, path = queue.popleft()
 
-    # Check if we've reached the end
-    if curr["y"] == end["y"] and curr["x"] == end["x"]:
-        if not shortest_path or len(path) < len(shortest_path):
-            shortest_path[:] = path[:]
-        path.pop()
-        seen.remove((curr["y"], curr["x"]))
-        return
+        if current == end:
+            return path  # This is guaranteed to be the shortest path
 
-    # Recursive exploration
-    for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-        next_point = Point(x=curr["x"] + dx, y=curr["y"] + dy)
-        dfs_walk(maze, wall, next_point, end, path, seen, shortest_path)
+        if (current["y"], current["x"]) in seen:
+            continue
 
-    # Backtrack
-    path.pop()
-    seen.remove((curr["y"], curr["x"]))
+        seen.add((current["y"], current["x"]))
+
+        for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+            next_x, next_y = current["x"] + dx, current["y"] + dy
+            if (
+                0 <= next_y < len(maze)
+                and 0 <= next_x < len(maze[0])
+                and maze[next_y][next_x] != wall
+            ):
+                next_point = Point(x=next_x, y=next_y)
+                queue.append((next_point, path + [next_point]))
+
+    return []  # No path found
 
 
-def maze_solver(maze: List[str], wall: str, start: Point, stop: Point) -> List[Point]:
-    shortest_path: List[Point] = []
-    dfs_walk(maze, wall, start, stop, [], set(), shortest_path)
-    return shortest_path
+# Example usage
+maze = [
+    "x xxxxxxxx x",
+    "x        x x",
+    "x        x x",
+    "x xxxxxxxx x",
+    "x          x",
+    "xxxxxxxxxxxx",
+]
 
+start = Point(x=1, y=0)
+end = Point(x=10, y=0)
 
-def main() -> List[Point]:
-    maze = [
-        "x xxxxxxxx x",
-        "x        x x",
-        "x        x x",
-        "x xxxxxxxx x",
-        "x          x",
-        "xxxxxxxxxxxx",
-    ]
-    return maze_solver(maze, "x", Point(x=1, y=0), Point(x=10, y=0))
+shortest_path = bfs_shortest_path(maze, "x", start, end)
+print("Shortest path:", shortest_path)
 
-
-if __name__ == "__main__":
-    maze = [
-        "x xxxxxxxx x",
-        "x        x x",
-        "x        x x",
-        "x xxxxxxxx x",
-        "x          x",
-        "xxxxxxxxxxxx",
-    ]
-    print(f"{5 * '*'} Traversing {5 * '*'}")
-    for line in maze:
-        print(line)
-    print("\n")
-    finished = main()
-    print(f"{5 * '*'} Found Solution {5 * '*'}")
-    print(finished)
-    print("\n")
-    print(f"{5 * '*'} Recreated Map {5 * '*'}")
-    for y, y_line in enumerate(maze):
-        new_line = ""
-        for x, x_line in enumerate(y_line):
-            point = Point(x=x, y=y)
-            if point in finished:
-                new_line += "o"
-            else:
-                new_line += maze[y][x]
-        print(new_line)
+# Visualization
+for y, row in enumerate(maze):
+    print(
+        "".join(
+            "o" if Point(x=x, y=y) in shortest_path else c for x, c in enumerate(row)
+        )
+    )

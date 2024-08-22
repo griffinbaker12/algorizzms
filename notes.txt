@@ -46,22 +46,29 @@ Chapter 2
             - Tendency of a program to access data locations that are near each other within
             a short period
             - Caches are designed to exploit spatial locality by loading entire cache lines
+        - [QUESTION] One additional question that I have is how Temporal locality plays into this because I
+        know this is a thing too obviously. But maybe it is not as relevant to this discussion...
     - You may over-allocate for an array, but for each item in the LL, you are storing additional
     data (the pointer to the next item), so unless the items are really large, you are probably
     better off using an array
         - If the items are large, then even one wasted spot can seem like a big deal, and that 
         extra mem for the pointers can seem small by comparison.
         - Relative overhead is larger for small items
-        - If the item is 10MB, and you over-allocate for 10, then you are allocating 100MB vs. 
+            - [QUESTION] Is this saying that if the values are just integers, than doubling that to store
+            a pointer is larger overhead? So is the equation: (size of item) / (size of pointer - 8 bytes)? 
+        - If the item is 10MB, and you over-allocate for 10 items, then you are allocating 100MB vs. 
         allocating 8 bytes for a pointer
     - Arrays have fast reads, and slow inserts
         - LLs have fast inserts, and slow reads
+            [QUESTION] This is only true right if you have a reference to the head or tail?
     - You'd want to use a LL if you can keep track of node references in applications like a stack
     or queue where operations are at the ends
         - So for something like a queue where a server puts new orders onto it and the chef reads
         the front (interacting with the ends of the list and not searching or random access
-        going on); interaction is going on at points we should already have references to
+        going on); interaction is going on at points we should already have references to in
+        a structured way
     - Arrays and LLs are combined to build more complex DS like hash tables and B-trees
+        - And we saw that with the hash table that we built!
 
 Chapter 3
 - Stack
@@ -73,7 +80,7 @@ Chapter 3
 the variables for that fn are still on the call stack
 - Using the stack via recursion is helpful b/c it manually handles the stack for you...
 
-Chapter 4
+Chapter 4 
 - D&C is a tool in the kit...can I solve this using D&C?
     - This technique has 2 steps:
         1) Find a simple base case
@@ -86,6 +93,8 @@ Chapter 4
     you need to do the partition step n times where you select the values on either side
     - The average case is nlogn which approximates you choosing a list that divides
     the size of the partition you check each time in half
+        - And that turns out to be the height of the tree, and you go over N elements
+        at each level
     - It seems similar to me to that one question where you select the values that you 
     may need, and then you combine them in any ways you need depending on the problem
         - Maybe you select the min value, maybe you call the same fn recursively 
@@ -98,4 +107,6 @@ Chapter 4
     - Actually fascinating because there would be values that you could not implement
     in languages with fixed-size integers, like MAX_SIZE+1 could not be represented
     without using a different type than what is returned by the fn
+        - [QUESTION] They mean something like having to use a float as an arg, but then
+        then the function would return an integer? That does seem like bad design.
 
